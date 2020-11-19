@@ -117,11 +117,24 @@ def obstacle_score_check():
 			if obstacle.centerx < 0:
 				can_score = True
 
+def update_highscore():
+	f=open("data.py","r")
+	lines=f.readlines()
+	f.close()
+	for i in range(len(lines)):
+		if lines[i].startswith("high_score="):
+			lines[i]="high_score=%d\t\t\t\t# high score\n"%(high_score)
+			break
+	f=open("data.py","w")
+	f.writelines(lines)
+	f.close()
+
 def quit_game():
 	global stop_threads
 	stop_threads=True
 	for thread in thread_list:
 		thread.join()
+	update_highscore()
 	pygame.quit()
 	sys.exit()
 
@@ -229,13 +242,13 @@ while True:
 	draw_background()
 
 	if game_running:
+		game_running=check_collison(obstacle_list)
+		obstacle_list=move_obstacles(obstacle_list)
+		draw_obstacles(obstacle_list)
 		spongebob_movement+=gravity
 		rotated_spongebob=rotate_spongebob(spongebob_surface)
 		spongebob_rect.centery+=spongebob_movement
 		screen.blit(rotated_spongebob,spongebob_rect)
-		game_running=check_collison(obstacle_list)
-		obstacle_list=move_obstacles(obstacle_list)
-		draw_obstacles(obstacle_list)
 		obstacle_score_check()
 		score_display('game_mode')
 	else:
