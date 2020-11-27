@@ -9,10 +9,10 @@ def floor_pos():
 		if game_running:
 			floor_x_pos-=1
 			bg_x_pos-=1
-			if bg_x_pos<=-576:
-				bg_x_pos=0
-			if floor_x_pos<=-576:
-				floor_x_pos=0
+			if bg_x_pos<=-1828:
+				bg_x_pos=-626
+			if floor_x_pos<=-1242:
+				floor_x_pos=-333
 		if stop_threads:
 			break
 		sleep(delay)
@@ -51,11 +51,11 @@ def spongebob_animation():
 
 def draw_background():
 	screen.blit(bg_surface,(bg_x_pos,0))
-	screen.blit(bg_surface,(bg_x_pos+576,0))
+	screen.blit(bg_surface,(bg_x_pos+1202,0))
 
 def draw_floor():
-	screen.blit(floor_surface,(floor_x_pos,900))
-	screen.blit(floor_surface,(floor_x_pos+576,900))
+	screen.blit(floor_surface,(floor_x_pos,550))
+	screen.blit(floor_surface,(floor_x_pos+909,550))
 
 def move_obstacles(obstacles):
 	for obstacle in obstacles:
@@ -72,7 +72,7 @@ def draw_obstacles(obstacles):
 
 def check_collison(obstacles):
 	for obstacle in obstacles:
-		if obstacle.colliderect(spongebob_rect.inflate(-20,-20)):
+		if obstacle.colliderect(spongebob_rect.inflate(-40,-40)):
 			return False
 	if spongebob_rect.top<=-100 or spongebob_rect.bottom>=900:
 		return False
@@ -155,13 +155,13 @@ game_font=pygame.font.Font(font_file,font_size)
 score_font=pygame.font.Font(font_file,score_font_size)
 
 bg_surface=pygame.transform.scale2x(pygame.image.load(bg_image).convert())
-floor_surface=pygame.transform.scale2x(pygame.image.load(floor_image).convert())
+floor_surface=pygame.image.load(floor_image).convert_alpha()
 
 # spongebob_surface=pygame.transform.scale2x(pygame.image.load(spongebob_mid_image).convert_alpha())
 # spongebob_rect=spongebob_surface.get_rect(center=start_position)
 
 spongebob_frames=[]
-spongebob_scale=0.36
+spongebob_scale=0.42
 spongebob_frames.append(pygame.transform.rotozoom(pygame.image.load(spongebob_0).convert_alpha(),0,spongebob_scale))
 spongebob_frames.append(pygame.transform.rotozoom(pygame.image.load(spongebob_1).convert_alpha(),0,spongebob_scale))
 spongebob_frames.append(pygame.transform.rotozoom(pygame.image.load(spongebob_2).convert_alpha(),0,spongebob_scale))
@@ -170,7 +170,7 @@ spongebob_index=1
 spongebob_surface=spongebob_frames[spongebob_index]
 spongebob_rect=spongebob_surface.get_rect(center=start_position)
 
-obstacle_surface=pygame.transform.scale2x(pygame.image.load(obstacle_image).convert())
+obstacle_surface=pygame.image.load(obstacle_image).convert_alpha()
 obstacle_list=[]
 
 stop_threads=False

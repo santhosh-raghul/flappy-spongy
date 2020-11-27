@@ -5,11 +5,11 @@ jump_height=10				# height of a single jump
 obst_freq=1.2				# time after which an obstacle appears
 obstacle_speed=5			# speed in which obstacle comes
 obstacle_heights=[			# heights in which obstacle can appear 
-	400,600,800
+	410,500,600,700,790
 	]
-obstacle_gap=320			# gap between upper and lower part of the obstacle
+obstacle_gap=330			# gap between upper and lower part of the obstacle
 frame_rate=120				# frame rate
-high_score=1				# high score
+high_score=0				# high score
 # === === === === === ===
 
 # === === font === ===
@@ -19,11 +19,11 @@ font_file='assets/04B_19.ttf'
 # === === === === === ===
 
 # === === images === ===
-bg_image="assets/background-night.png"
-floor_image="assets/base.png"
+bg_image="assets/background.png"
+floor_image="assets/floor.png"
 spongebob_0="assets/spongebob_0.png"
 spongebob_1="assets/spongebob_1.png"
 spongebob_2="assets/spongebob_2.png"
 spongebob_3="assets/spongebob_3.png"
-obstacle_image="assets/pipe-green.png"
+obstacle_image="assets/squidward.png"
 # === === === === === ===
