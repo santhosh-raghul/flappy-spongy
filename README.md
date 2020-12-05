@@ -10,6 +10,7 @@ Done as a project for OS course
 using pygame library and multithreading.
 
 <br>
+
 Group project done by 
 -
 * __[Shreja R](https://github.com/shreja2000)__
