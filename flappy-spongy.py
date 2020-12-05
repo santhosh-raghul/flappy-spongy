@@ -135,9 +135,9 @@ def quit_game():
 	pygame.quit()
 	sys.exit()
 
-pygame.init()
-pygame.display.set_caption('FlaPpY sPoNgy')
-screen=pygame.display.set_mode((576,1024))
+pygame.init() # pygame initiation
+pygame.display.set_caption('FlaPpY sPoNgy') # pygame title
+screen=pygame.display.set_mode((576,1024)) # setting window size
 clock=pygame.time.Clock()
 
 spongebob_movement=0        
@@ -145,63 +145,75 @@ floor_x_pos=0
 bg_x_pos=0
 game_time=0
 score=0
-game_running=False
-can_score=True
+game_running=False #flag to check if game is running
+can_score=True #control variable in obstacle_score_check init to True
 delay=1/frame_rate
 
+
+# loading fonts 
 game_font=pygame.font.Font(font_file,font_size)
 score_font=pygame.font.Font(font_file,score_font_size)
-
+# loading the background image 
 bg_surface=pygame.transform.scale2x(pygame.image.load(bg_image).convert())
+# loading the floor image 
 floor_surface=pygame.image.load(floor_image).convert_alpha()
 
-spongebob_frames=[]
+spongebob_frames=[] # contains the list of frames of the character to display to create animation
 spongebob_scale=0.42
+# pygame.image.load(image_file) will load the image file
+# .convert_alpha() method will convert the image to a format which is easier for
+# the pygame library to work with, while retaining the transparency of the png image
+# pygame.transform.rotozoom(image,rotation_angle,scale_factor) will rotate and scale the given image
+# finally the returned image is appended to the spongebob_frames list
 spongebob_frames.append(pygame.transform.rotozoom(pygame.image.load(spongebob_0).convert_alpha(),0,spongebob_scale))
 spongebob_frames.append(pygame.transform.rotozoom(pygame.image.load(spongebob_1).convert_alpha(),0,spongebob_scale))
 spongebob_frames.append(pygame.transform.rotozoom(pygame.image.load(spongebob_2).convert_alpha(),0,spongebob_scale))
 spongebob_frames.append(pygame.transform.rotozoom(pygame.image.load(spongebob_3).convert_alpha(),0,spongebob_scale))
-spongebob_index=1
+spongebob_index=1 # index of normal spongebob image
 spongebob_surface=spongebob_frames[spongebob_index]
-spongebob_rect=spongebob_surface.get_rect(center=start_position)
+spongebob_rect=spongebob_surface.get_rect(center=start_position) # place the image at start position
 
+# To spawn obstacles chosen at random from obstacle_image given in the data.py 
 obstacle_surface=pygame.image.load(obstacle_image).convert_alpha()
 obstacle_list=[]
 
-stop_threads=False
+stop_threads=False # variable to check for stopping the threads
 thread_list=[]
+# creating 3 threads for the functions specified 
 thread_list.append(threading.Thread(target=floor_pos))
 thread_list.append(threading.Thread(target=create_obstacles))
 thread_list.append(threading.Thread(target=spongebob_animation))
-start_time=timer()
+
+start_time=timer() # start time
+# thread for timer
 timer_thread=threading.Thread(target=stopwatch)
 
 for thread in thread_list:
 	thread.start()
 
-first_screen=True
+first_screen=True # this is the first screen after the program was just executed
 
 while first_screen:
 
 	for event in pygame.event.get():
-		if event.type == pygame.QUIT:
-			quit_game()
+		if event.type == pygame.QUIT: # if the user presses the cross button in the game window
+			quit_game() # calling quit_game() function
 		if event.type == pygame.KEYDOWN:
-			if event.key == pygame.K_SPACE:
-				game_running=True
-				stop_timer=False
-				score=0
-				start_time=timer()
-				obstacle_list.clear()
-				spongebob_movement=-jump_height
-				start_time=timer()
-				timer_thread=threading.Thread(target=stopwatch)
-				timer_thread.start()
-				first_screen=False
-			elif event.key == pygame.K_ESCAPE:
+			if event.key == pygame.K_SPACE: # when the user taps the space bar button
+				game_running=True # set the game_running control variable to True
+				stop_timer=False # initialise stop_timer to be false for the timer thread
+				score=0 # initialize score to zero 
+				obstacle_list.clear() # clear the previously created obstacles 
+				spongebob_movement=-jump_height # decrease y cordinate of the character to make it jump (y increases downwards) 
+				start_time=timer() # set the game starting time
+				timer_thread=threading.Thread(target=stopwatch) # create the timer thread
+				timer_thread.start() # start the timer thread
+				first_screen=False # the displayed screen is no longer the first screen
+			elif event.key == pygame.K_ESCAPE:# quit game when esc button is pressed
 				quit_game()
 
-	draw_background()
+	# display the background, character, floor and message for the user, in the first screen
+	draw_background() 
 	spongebob_surface=spongebob_frames[1]
 	screen.blit(spongebob_surface,spongebob_rect)
 	score_display('game_over',"PRESS SPACE TO START")
@@ -210,7 +222,13 @@ while first_screen:
 	pygame.display.update()
 	clock.tick(frame_rate)
 
-while True:
+
+# this loop is for succesive games after the first game 
+# this code has comments for the parts not present in the first game
+# for the uncommented parts please refer the corresponding lines in the 
+# above first screen loop
+
+while True: # for successive games
 
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
@@ -225,7 +243,6 @@ while True:
 				game_running=True
 				stop_timer=False
 				score=0
-				start_time=timer()
 				obstacle_list.clear()
 				spongebob_movement=-jump_height
 				start_time=timer()
@@ -234,30 +251,32 @@ while True:
 			elif event.key == pygame.K_ESCAPE:
 				quit_game()
 
+	# this happens 'frame_rate' number of times every second
+		
 	draw_background()
 
-	if game_running:
-		game_running=check_collison(obstacle_list)
-		obstacle_list=move_obstacles(obstacle_list)
+	if game_running: # if still game on
+		game_running=check_collison(obstacle_list) # checking for collision
+		obstacle_list=move_obstacles(obstacle_list) # move obstacle and draw them
 		draw_obstacles(obstacle_list)
-		spongebob_movement+=gravity
-		rotated_spongebob=rotate_spongebob(spongebob_surface)
-		spongebob_rect.centery+=spongebob_movement
-		screen.blit(rotated_spongebob,spongebob_rect)
-		obstacle_score_check()
-		score_display('game_mode')
-	else:
-		high_score = max(score,high_score)
-		spongebob_rect.center=start_position
-		spongebob_index=1
+		spongebob_movement+=gravity # make spongebob move down due to gravity(moves down)
+		rotated_spongebob=rotate_spongebob(spongebob_surface) # rotate spongebob according to motion
+		spongebob_rect.centery+=spongebob_movement # change the image postion according to motion
+		screen.blit(rotated_spongebob,spongebob_rect) # print the character on screen
+		obstacle_score_check() # score update
+		score_display('game_mode') # display
+	else: # game ove
+		high_score = max(score,high_score) # update highscore
+		spongebob_rect.center=start_position # move the character to the start position
+		spongebob_index=1 # normal spongebob image
 		spongebob_surface=spongebob_frames[spongebob_index]
-		screen.blit(spongebob_surface,spongebob_rect)
-		if(timer_thread.is_alive()):
+		screen.blit(spongebob_surface,spongebob_rect) # display character
+		if(timer_thread.is_alive()): # stop timer thread if its active
 			stop_timer=True
 			timer_thread.join()
-		score_display('game_over',"Time: "+str(round(game_time,3)))
+		score_display('game_over',"Time: "+str(round(game_time,3))) # display score and time
 
-	draw_floor()
+	draw_floor() # drawing floor
 
 	pygame.display.update()
 	clock.tick(frame_rate)
