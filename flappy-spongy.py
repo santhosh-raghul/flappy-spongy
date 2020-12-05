@@ -83,10 +83,11 @@ def rotate_spongebob(spongebob):
 
 def display_text(display_text,rectangle_center,font_size=''):
 
+	text_color=(13, 59, 76)
 	if font_size == 'big':
-		text_surface = score_font.render(display_text,True,(255,255,255))
+		text_surface = score_font.render(display_text,True,text_color)
 	else:
-		text_surface = game_font.render(display_text,True,(255,255,255))
+		text_surface = game_font.render(display_text,True,text_color)
 
 	text_rect = text_surface.get_rect(center=rectangle_center)
 	screen.blit(text_surface,text_rect)
@@ -135,6 +136,7 @@ def quit_game():
 	sys.exit()
 
 pygame.init()
+pygame.display.set_caption('FlaPpY sPoNgy')
 screen=pygame.display.set_mode((576,1024))
 clock=pygame.time.Clock()
 
@@ -152,9 +154,6 @@ score_font=pygame.font.Font(font_file,score_font_size)
 
 bg_surface=pygame.transform.scale2x(pygame.image.load(bg_image).convert())
 floor_surface=pygame.image.load(floor_image).convert_alpha()
-
-# spongebob_surface=pygame.transform.scale2x(pygame.image.load(spongebob_mid_image).convert_alpha())
-# spongebob_rect=spongebob_surface.get_rect(center=start_position)
 
 spongebob_frames=[]
 spongebob_scale=0.42
@@ -256,7 +255,7 @@ while True:
 		if(timer_thread.is_alive()):
 			stop_timer=True
 			timer_thread.join()
-		score_display('game_over',"time: "+str(round(game_time,3)))
+		score_display('game_over',"Time: "+str(round(game_time,3)))
 
 	draw_floor()
 
