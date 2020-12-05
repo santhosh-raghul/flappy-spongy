@@ -9,13 +9,13 @@ obstacle_heights=[			# heights in which obstacle can appear
 	]
 obstacle_gap=330			# gap between upper and lower part of the obstacle
 frame_rate=120				# frame rate
-high_score=0				# high score
+high_score=6				# high score
 # === === === === === ===
 
 # === === font === ===
 font_size=40
 score_font_size=70
-font_file='assets/04B_19.ttf'
+font_file='assets/spongebob-font.ttf'
 # === === === === === ===
 
 # === === images === ===
